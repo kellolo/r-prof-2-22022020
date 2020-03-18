@@ -1,6 +1,7 @@
 import messageMiddleware from './messageMiddleware.js';
-import generateIdMiddleware from './generateIdMiddleware.js';
+import { apiMiddleware } from 'redux-api-middleware';
+
 export default [
-    messageMiddleware,
-    generateIdMiddleware
+    apiMiddleware,
+    messageMiddleware
 ];

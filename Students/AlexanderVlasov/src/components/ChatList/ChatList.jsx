@@ -10,7 +10,7 @@ import DeleteIcon from '@material-ui/icons/DeleteForeverRounded';
 import { withRouter } from 'react-router-dom';
 
 import PropTypes from 'prop-types';
-import { withStyles, TextField, GridList, IconButton, ListItemSecondaryAction } from '@material-ui/core';
+import { withStyles, TextField, IconButton, ListItemSecondaryAction } from '@material-ui/core';
 
 const useStyles = (theme => ({
   active: {
@@ -38,12 +38,10 @@ const useStyles = (theme => ({
   }
 }));
 
-import { addChat, delChat } from '../../store/actions/chats_action.js';
+import { addChat, delChat, loadChats } from '../../store/actions/chats_action.js';
 
 import { bindActionCreators } from 'redux';
 import connect from 'react-redux/es/connect/connect';
-
-import { push } from 'connected-react-router';
 
 class ChatList extends React.Component {
   static propTypes = {
@@ -68,17 +66,32 @@ class ChatList extends React.Component {
 
   deleteChat = (chatId) => {
     this.props.delChat(chatId);
-    this.handleNavigate('/');
+    if (this.props.match.params.chatId === chatId) {
+      this.handleNavigate('/');
+    }
   }
 
   addChat = () => {
     this.props.addChat(this.state.newChatTitle);
     this.setState({newChatTitle: ''});
+    // let chat = {
+    //   title: this.state.newChatTitle
+    // }
+    // fetch('/api/chat', {
+    //     method: 'POST', headers: { 'Content-Type': 'application/json'},
+    //     body: JSON.stringify(chat)
+    // }).then((res) => {
+    //     console.log(res);
+    //     this.setState({newChatTitle: ''});
+    // })
+  }
+
+  componentDidMount() {
+    this.props.loadChats();
   }
 
   render() {
     const { classes, chats, match: { params } } = this.props;
-    console.log(this.props);
     const renderedChats = Object.keys(chats).map((key) => {
       return (
           <ListItem 
@@ -126,8 +139,9 @@ class ChatList extends React.Component {
 }
 
 const mapStateToProps = ({ chatsReducer }) => ({
-  chats: chatsReducer.chats
+  chats: chatsReducer.chats,
+  isLoading: chatsReducer.isLoading
 });
-const mapDispatchToProps = dispatch => bindActionCreators({ addChat, delChat }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ addChat, delChat, loadChats }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(useStyles)(withRouter(ChatList)))

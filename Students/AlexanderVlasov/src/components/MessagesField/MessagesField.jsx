@@ -4,7 +4,7 @@ import {withStyles} from '@material-ui/core/styles';
 import styles from './style.css';
 
 import Message from '../Message/Message.jsx';
-import { Box, Fab, TextField, GridList, List } from '@material-ui/core';
+import { Fab, TextField, List, CircularProgress } from '@material-ui/core';
 import SendIcon from '@material-ui/icons/Send';
 
 const useStyles = (theme => ({
@@ -17,10 +17,17 @@ const useStyles = (theme => ({
       width: '100%',
       overflow: 'auto',
       height: 'calc(100vh - 120px)',
+      position: 'relative'
+    },
+    loader: {
+        position: 'absolute',
+        left: '50%',
+        top: '50%'
     }
   }));
 
-import { sendMessage } from '../../store/actions/messages_action.js';
+import { sendMessage, loadMessages } from '../../store/actions/messages_action.js';
+
 
 import { bindActionCreators } from 'redux';
 import connect from 'react-redux/es/connect/connect';
@@ -45,6 +52,10 @@ class Messages extends Component {
     }
 
     componentDidMount() {
+        this.props.loadMessages();
+    }
+
+    componentDidUpdate() {
         this.scrollToBottom();
     }
 
@@ -56,13 +67,25 @@ class Messages extends Component {
         const { messages, match: { params } } = this.props;
         this.props.sendMessage(null, params.chatId, sender, text);
         this.setState({msg: ''});
-        this.scrollToBottom();
+        // let msg = {
+        //     sender,
+        //     text,
+        //     chatId: '5e714824e5a97f850fdacb9b'//params.chatId
+        // }
+        // fetch('/api/message', {
+        //     method: 'POST', headers: { 'Content-Type': 'application/json'},
+        //     body: JSON.stringify(msg)
+        // }).then((res) => {
+        //     console.log(res);
+        //     this.setState({msg: ''});
+        //     this.scrollToBottom();
+        // })
     }
 
     render() {
         const { classes, messages, match: { params } } = this.props;
         const mapMessages = messages[params.chatId];
-        const renderMessages = Object.keys(mapMessages).map(messageId => {
+        const renderMessages = mapMessages ? Object.keys(mapMessages).map(messageId => {
             return (
                 <Message 
                     key={ `${params.chatId}@@${messageId}` } 
@@ -70,11 +93,12 @@ class Messages extends Component {
                     text={ mapMessages[messageId].text }
                 />
             )
-        })
+        }) : [];
         return (
-            <div className={ classes.root}>
+            <div className={ classes.root }>
                 <List className={ classes.gridList } cols={ 1 } spacing={ 0 } ref={this.messagesEndRef}>
-                    { renderMessages.length ? renderMessages : <div></div> }
+                    { this.props.isLoading ? 
+                    <CircularProgress className={ classes.loader }/> : renderMessages.length ? renderMessages : <div></div> }
                 </List>
                 <TextField 
                     className="flex-grow-1"
@@ -95,8 +119,9 @@ class Messages extends Component {
 }
 
 const mapStateToProps = ({ msgReducer }) => ({
-    messages: msgReducer.messages
+    messages: msgReducer.messages,
+    isLoading: msgReducer.isLoading
 });
-const mapDispatchToProps = dispatch => bindActionCreators({ sendMessage }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ sendMessage, loadMessages }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(useStyles)(withRouter(Messages)))

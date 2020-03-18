@@ -1,29 +1,48 @@
 import update from 'react-addons-update';
 
-import { ADD_CHAT, DEL_CHAT } from '../actions/chats_action.js';
+import {
+    SUCCESS_CHATS_ADDING,
+    SUCCESS_CHATS_LOADING,
+    SUCCESS_CHATS_DELETING
+} from '../actions/chats_action.js';
 
 const initialStore = {
-    chats: {
-    }
+    chats: {},
+    isLoading: true
 }
 
 export default function chatsReducer(store = initialStore, action) {
     switch (action.type) {
-        case ADD_CHAT: {
+        case SUCCESS_CHATS_ADDING: {
             return update(store, {
                 chats: {
                     $merge: {
-                        [action.chatId] : {
-                            title: action.title
+                        [action.payload.chatId] : {
+                            title: action.payload.title
                         }
                     }
                 }
             })
         }
-        case DEL_CHAT: {
-            let cloneStore = Object.assign({}, store);
-            delete cloneStore.chats[action.chatId];
-            return cloneStore;
+        case SUCCESS_CHATS_DELETING: {
+            let chats = Object.assign({}, store.chats);
+            delete chats[action.payload.chatId];
+            return update(store, {
+                chats: {
+                    $set: chats
+                }
+            });
+        }
+        case SUCCESS_CHATS_LOADING: {
+            const chats = {};
+            action.payload.forEach(chat => {
+                const { title } = chat;
+                chats[chat.chatId] = { title };
+            });
+            return update(store, {
+                chats: { $set: chats },
+                isLoading: { $set: false }
+            })
         }
         default: return store;
     }
