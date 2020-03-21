@@ -18,6 +18,9 @@ module.exports = {
         port: 3000,
         hot: true,
         open: true,
+        watchOptions: {
+            poll: true
+            },
         historyApiFallback: {
             index: 'index.html'
         }  

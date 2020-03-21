@@ -35,16 +35,11 @@ export default function chatsReducer(store = initialStore, action) {
                 }
             })
         }
-        // case DEL_CHAT: {
-
-        //     //let newStore = JSON.parse(JSON.stringify(store.chats))
-        //     //delete newStore[action.chatId]
-        //    // console.log(newStore)
-        //     return update(store, {
-        //         newStore
-                    
-        //         })
-        // }
+        case DEL_CHAT: {
+            let newStore = JSON.parse(JSON.stringify(store))
+            delete newStore.chats[action.chatId]
+            return newStore
+        }
         default: {
             return store
         }
