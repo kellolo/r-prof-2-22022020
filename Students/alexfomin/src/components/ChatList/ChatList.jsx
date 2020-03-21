@@ -25,7 +25,6 @@ import { push } from 'connected-react-router'
         }
 
         handleDelChat = (event, chatId) => {
-            //console.log(event, chatId)
             this.props.delChat(chatId)
             event.stopPropagation()
         }
