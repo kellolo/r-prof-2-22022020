@@ -28,6 +28,7 @@ export default function initStore() {
 
         const persistor = persistStore(store);
 
+
         return { store, persistor };
 
 }

@@ -21,9 +21,14 @@ module.exports = {
         watchOptions: {
             poll: true
             },
-        historyApiFallback: {
-            index: 'index.html'
-        }  
+            proxy: {
+                '/api': {
+                    target: 'http://localhost:3300',
+                    pathRewrite: { '^/api' : '' },
+                    secure: false,
+                    changeOrigin: true
+                }
+            }
     },
     module: {
         rules: [
