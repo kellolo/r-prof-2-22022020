@@ -3,8 +3,8 @@ import { apiMiddleware } from 'redux-api-middleware';
 
 
 export default [
-   apiMiddleware,
-   messageMiddleware,
+  messageMiddleware,
+   apiMiddleware
   // logger,
   // crashReporter
 ];

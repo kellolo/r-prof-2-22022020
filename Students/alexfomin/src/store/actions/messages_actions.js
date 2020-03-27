@@ -21,7 +21,7 @@ export const sendMessage = (messageId, sender, text, chatId) => ({
                type: SUCCESS_MESSAGE_SENDING,
                payload: (action, state, res) => getJSON(res).then(
                    json => {
-                    return {json} //Status
+                    return {json,  msg: {chatId, sender, text}} //Status
                 }
                ),
            },
@@ -41,7 +41,7 @@ export const loadMessages = () => ({
                 type: SUCCESS_MESSAGES_LOADING,
                 payload: (action, state, res) => getJSON(res).then(
                     json => {
-                        console.log('sdsdds')
+                        // console.log('sdsdds')
                      return {json} //Status
                  }
                 ),

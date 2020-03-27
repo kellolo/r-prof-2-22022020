@@ -72,7 +72,7 @@ export default function msgReducer(store = initialStore, action) {
         case SUCCESS_MESSAGES_LOADING: {
             console.log('SUCCESS_MESSAGES_LOADING')
             if (action.payload.json) {
-                console.log('dfdfee', action.payload)
+                //console.log('dfdfee', action.payload)
                 return update(store, {
                     messages: { $set: action.payload.json }
                 })

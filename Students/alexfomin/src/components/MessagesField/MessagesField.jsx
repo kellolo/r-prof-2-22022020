@@ -48,7 +48,7 @@ class Messages extends Component {
 
     componentDidMount () {
         console.log('Итерация ')
-        //this.props.loadMessages()
+        this.props.loadMessages()
     }
 
     

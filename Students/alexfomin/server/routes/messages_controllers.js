@@ -1,14 +1,14 @@
 const express = require('express');
-const router = express.Router();
+const messageRouter = express.Router();
 
 const Message = require('../models/message')
 
-router.get('/messages', async (req, res) => {
-    let messages = await Message.find() 
+messageRouter.get('/messages', async (req, res) => {
+    let messages = await Message.find().sort({'created_at': "asc"}) 
     res.json(messages)
 } )
 
-router.post('/message', async (req, res) => {
+messageRouter.post('/message', async (req, res) => {
     console.log(req.body)
     try {
         const { chatId, sender, text } = req.body
@@ -23,4 +23,4 @@ router.post('/message', async (req, res) => {
 
 } )
 
-module.exports = router
+module.exports = messageRouter
