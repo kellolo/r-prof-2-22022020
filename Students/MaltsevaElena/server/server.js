@@ -1,27 +1,35 @@
 const express = require('express')
+const config = require('config')
 const mongoose = require('mongoose')
-const Message = require('./models/message.js')
-const Chat = require('./models/chat.js')
+const Message = require('./models/Message.js')
+const Chat = require('./models/Chat.js')
+const User = require('./models/User.js')
 
 const app = express()
 
 // Middlewares
-app.use(express.json())
+app.use(express.json({ extended: true }))
+app.use('/auth', require('./routes/auth.routes.js'))
 
-// Server
-const port = 3300
-app.listen(port, () => {
-   console.log(`Server is listening on port ${port}`)
-})
+const PORT = config.get('port') || 3300
 
-// Database
-mongoose.connect('mongodb://localhost/reactgram-v2', {
-   useNewUrlParser: true,
-   useUnifiedTopology: true,
-   useFindAndModify: false
-})
-   .then(() => { console.log('Database connected') })
-   .catch(error => { console.log('Database disconnected:', error) })
+async function start() {
+   try {
+      await mongoose.connect(config.get('mongoUri'), {
+         useNewUrlParser: true,
+         useUnifiedTopology: true,
+         useFindAndModify: false,
+         useCreateIndex: true
+      })
+      app.listen(PORT, () => console.log(`Server is listening on port ${PORT}`))
+   } catch (e) {
+      console.log('Server Error:', e.message)
+      process.exit(1)
+   }
+}
+
+start()
+
 
 
 // API for messages
@@ -53,4 +61,11 @@ app.delete('/chat', async (req, res) => {
    await Chat.findOneAndDelete({ _id: req.body.chatId })
    await Message.deleteMany({ chatId: req.body.chatId })
    res.json({ _id: req.body.chatId })
+})
+
+
+// API for contacts
+app.get('/users', async (req, res) => {
+   const users = await User.find()
+   res.json(users)
 })
