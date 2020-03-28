@@ -21,7 +21,7 @@ import { push } from 'connected-react-router'
 
         handleAddChat = () => {
             this.props.addChat(this.state.title)
-            this.setState({ input: '' })
+            this.setState({ title: '' })
         }
 
         handleDelChat = (event, chatId) => {
