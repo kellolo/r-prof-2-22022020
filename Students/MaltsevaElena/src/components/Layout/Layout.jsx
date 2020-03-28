@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Grid } from '@material-ui/core'
 import PropTypes from 'prop-types'
-import './style.css'
 
 // Store
 import { bindActionCreators } from 'redux'
