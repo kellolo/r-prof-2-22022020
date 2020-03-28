@@ -6,9 +6,8 @@ export let ERROR_CHATS_LOADING = '@@chat/ERROR_CHATS_LOADING'
 
 export let loadChats = () => ({
    [RSAA]: {
-      // endpoint: '/static-api/chats.json',    // load data from JSONPlaceholder
-      endpoint: '/api/chats',                   // load data from Database
-      method: 'GET',                            // it works both, with JSONPlaceholder and Database
+      endpoint: '/api/chats',
+      method: 'GET',
       types: [
          START_CHATS_LOADING,
          {
@@ -27,7 +26,7 @@ export let ERROR_CHAT_CREATING = '@@chat/ERROR_CHAT_CREATING'
 export let addChat = (title) => ({
    [RSAA]: {
       endpoint: '/api/chat',
-      method: 'POST',                           // it works with Database only
+      method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({title}),
       types: [
@@ -48,7 +47,7 @@ export let ERROR_CHAT_DELETING = '@@chat/ERROR_CHAT_DELETING'
 export let deleteChat = (chatId) => ({
    [RSAA]: {
       endpoint: '/api/chat',
-      method: 'DELETE',                         // it works with Database only
+      method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({chatId}),
       types: [

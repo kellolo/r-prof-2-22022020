@@ -6,9 +6,8 @@ export let ERROR_MESSAGES_LOADING = '@@messages/ERROR_MESSAGES_LOADING'
 
 export let loadMessages = () => ({
    [RSAA]: {
-      // endpoint: '/static-api/messages.json',    // load data from JSONPlaceholder
-      endpoint: '/api/messages',                   // load data from Database
-      method: 'GET',                               // it works both, with JSONPlaceholder and Database
+      endpoint: '/api/messages',
+      method: 'GET',
       types: [
          START_MESSAGES_LOADING,
          {
@@ -27,7 +26,7 @@ export let ERROR_MESSAGE_SENDING = '@@messages/ERROR_MESSAGE_SENDING'
 export let sendMessage = (sender, text, chatId) => ({
    [RSAA]: {
       endpoint: '/api/message',                       
-      method: 'POST',                              // it works with Database only
+      method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({sender, text, chatId}),
       types: [
