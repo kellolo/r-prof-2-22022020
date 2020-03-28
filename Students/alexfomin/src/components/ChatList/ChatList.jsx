@@ -21,11 +21,12 @@ import { push } from 'connected-react-router'
 
         handleAddChat = () => {
             this.props.addChat(this.state.title)
-            this.setState({ input: '' })
+            this.setState({ title: '' })
         }
 
-        handleDelChat = (chatId) => {
+        handleDelChat = (event, chatId) => {
             this.props.delChat(chatId)
+            event.stopPropagation()
         }
 
         handleNavigate = (link) => {
@@ -45,7 +46,7 @@ import { push } from 'connected-react-router'
         
         Object.keys(chats).forEach(key => {
             chatsArray.push(
-                <ListGroupItem onClick = { () => this.handleNavigate(`/chat/${key}`) }>{chats[key].title}<Button close onClick = { this.handleDelChat(key) }/></ListGroupItem>
+                <ListGroupItem onClick = { () => this.handleNavigate(`/chat/${key}`) }>{chats[key].title}<Button close onClick = {(event) => this.handleDelChat(event, key)}/></ListGroupItem>
             )
         })
 
