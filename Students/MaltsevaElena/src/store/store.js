@@ -12,7 +12,7 @@ const persistConfig = {
    key: 'reactgram',
    storage,
    stateReconciler: autoMergeLevel2,
-   whitelist: ['msgReducer', 'chatReducer', 'userReducer']
+   whitelist: ['chatReducer', 'userReducer']
 }
 
 export const history = createBrowserHistory()
